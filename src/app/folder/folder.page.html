@@ -1,21 +1,95 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>{{ folder }}</ion-title>
+  <ion-toolbar color="primary">
+    <ion-icon name="logo-instagram" class="ion-padding-start" slot="start" style="font-size: larger;margin:auto"></ion-icon>
+    <ion-title style="padding-left: 5px;">Insta Uploader</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">{{ folder }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-segment [(ngModel)]="segment" (click)="this.defaultSegment = 'text'" >
+  <ion-segment-button value="text" >
+    <ion-label>Convert Text</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="feed" (click)="this.defaultSegment = 'feed'">
+    <ion-label>Insta Feeder</ion-label>
+  </ion-segment-button>
+</ion-segment>
 
-  <div id="container">
-    <strong class="capitalize">{{ folder }}</strong>
-    <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+
+<ion-content *ngIf="this.segment === 'text'" >
+
+
+
+  <ion-row class="ion-padding">
+  <ion-col>
+    <ion-list>
+    <ion-input placeholder="Enter Price here..." 
+    style="border:0.5px solid #2d2d2d;border-radius:0.5rem; font-size: small;" 
+    [(ngModel)]="priceArea" value="priceArea" (ionChange)="priceChanged(priceArea)">
+    </ion-input><br>
+
+    <ion-textarea auto-grow="true" 
+    placeholder="Enter description here..." 
+    style="border:0.5px solid #2d2d2d;border-radius:0.5rem; font-size: small;min-height:75px"
+    [(ngModel)]="textArea" value="textArea"
+    (ionChange)="textChanged(textArea)" ></ion-textarea>
+
+    </ion-list>
+    </ion-col>
+  </ion-row>
+
+    <ion-row *ngIf="this.textArea.length > 0" class="ion-padding-horizontal ion-margin-horizontal " 
+    style="border:1px solid green;border-radius:0.5rem; font-size: small;">
+         <ion-textarea auto-grow="true" style="white-space: pre-wrap;"
+          [(ngModel)]="newTextArea" 
+          (ionChange)="finalChanges(newTextArea)"></ion-textarea>
+    </ion-row>
+
 </ion-content>
+
+  <ion-footer *ngIf="this.segment === 'text'">
+  <ion-row class="ion-padding-horizontal">
+    <ion-col>
+      <ion-button expand="block" fill="outline" color="tertiary" (click)="clearAll()">Clear</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button expand="block"  color="tertiary" (click)="copyToClipboard()">Copy to Clipboard</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>
+
+
+
+<ion-content *ngIf="this.segment === 'feed'"  >
+
+   <ion-row>
+    <ion-col class="ion-text-center">
+    <img [src]="base64Image" *ngIf="base64Image" class="ion-padding">
+    <ion-button expand="block" fill="outline" *ngIf="base64Image" (click)="openGallery()">Retake Image</ion-button>
+    <ion-icon *ngIf="!base64Image" name="add-circle-outline" style="font-size: 50px;margin-top:10%" (click)="openGallery()"></ion-icon><br> 
+    </ion-col>
+   </ion-row> 
+
+    <ion-row class="ion-padding ion-margin" 
+    style="border:0.5px solid green;border-radius:0.5rem; font-size: small;white-space: pre-wrap; max-height:40%;overflow:auto">
+      <ion-text>{{this.instaCaption}}</ion-text>
+    </ion-row>
+  
+
+</ion-content>
+
+ <ion-footer *ngIf="this.segment === 'feed'">
+  <ion-row class="ion-padding-horizontal">
+    <ion-col>
+      <ion-button expand="block" fill="outline" color="tertiary">Clear</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button expand="block"  color="tertiary" (click)="instaShare()">Instagram Share</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>
+
+
+
+
+  
+

@@ -1,5 +1,7 @@
 {
   "name": "InstaUploader",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
